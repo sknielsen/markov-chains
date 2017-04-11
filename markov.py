@@ -100,6 +100,35 @@ def make_text(chains):
     return " ".join(words)
 
 
+def limit_to_140_char(string):
+    """Take string and truncate to 140 characters
+
+    Take string and limit to max 140 characters and end on punctuation
+    """
+
+    #truncate the string to 140 characters
+    truncated_string = string[:140]
+
+    #iterate backwards through the string until we find the index of !.?
+    for i in range((len(truncated_string) - 1), 0, -1):
+        if truncated_string[i] in ['.', '!', '?']:
+            final_string = truncated_string[:(i + 1)]
+            return final_string
+        #if
+    for i in range((len(truncated_string) - 1), 0, -1):
+        if truncated_string[i] == ',':
+            final_string = truncated_string[:(i + 1)]
+            return final_string
+
+    for i in range((len(truncated_string) - 1), 0, -1):
+        if truncated_string[i] == ' ':
+            final_string = truncated_string[:(i + 1)]
+            return final_string
+    #slice the string from begining to that index +1
+
+
+
+
 #input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
@@ -110,5 +139,9 @@ chains = make_chains(input_text, sys.argv[2])
 
 # Produce random text
 random_text = make_text(chains)
+
+# Check if text is great than 140 characters
+if len(random_text) > 140:
+    random_text = limit_to_140_char(random_text)
 
 print random_text
