@@ -66,7 +66,10 @@ def make_text(chains):
 
     # your code goes here
     #pick a random key to start with
+    #force only start on capital letter
     link_text = choice(chains.keys())
+    while not link_text[0][0].isupper():
+        link_text = choice(chains.keys())
 
     #this might work, but looking and then stopping is better
     # while True:
@@ -98,7 +101,6 @@ input_text = open_and_read_file(sys.argv[1])
 
 # Get a Markov chain
 chains = make_chains(input_text, sys.argv[2])
-print chains
 
 # Produce random text
 random_text = make_text(chains)
