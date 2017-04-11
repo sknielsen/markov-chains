@@ -1,6 +1,11 @@
 """Generate markov text from text files."""
 
 
+# add character limit to the resulting text (perhaps 140 char) AND end on
+# a word!  And th 140 char limit ends on !?. punctuation.
+# error check to make sure n_gram_length is an integer
+#
+
 from random import choice
 import sys
 
@@ -49,13 +54,14 @@ def make_chains(text_string, n_gram_length):
         key = ()
         for num in range(n_gram_length):
             key += (words[i + num],)
-            #key = (words[i], words[i + 1])
 
-        if key in chains:
-            chains[key].append(words[i+n_gram_length])
-        else:
-            chains[key] = [words[i+n_gram_length]]
+    #here is a successful way to do it, but below using setdefault is better
+    #     if key in chains:
+    #         chains[key].append(words[i+n_gram_length])
+    #     else:
+    #         chains[key] = [words[i+n_gram_length]]
 
+        chains.setdefault(key, []).append(words[i+n_gram_length])
     return chains
 
 
