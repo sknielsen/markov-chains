@@ -12,9 +12,7 @@ def open_and_read_file(file_path):
     """
 
     # open file and put it in one long string
-    text_file = open(file_path)
-
-    text_string = text_file.read()
+    text_string = open(file_path).read()
 
     return text_string
 
@@ -41,6 +39,11 @@ def make_chains(text_string):
     """
 
     chains = {}
+    words = text_string.split()
+    for i in range(len(words) - 1):
+        key = (words[i], words[i + 1])
+        if key not in chains:
+            chains[key] = []
 
     # your code goes here
 
