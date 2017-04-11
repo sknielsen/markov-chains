@@ -2,6 +2,7 @@
 
 
 from random import choice
+import sys
 
 
 def open_and_read_file(file_path):
@@ -16,7 +17,7 @@ def open_and_read_file(file_path):
 
     return text_string
 
-def make_chains(text_string):
+def make_chains(text_string, n_gram_length):
     """Takes input text as string; returns dictionary of markov chains.
 
     A chain will be a key that consists of a tuple of (word1, word2)
@@ -39,17 +40,21 @@ def make_chains(text_string):
     """
     #create dictionary to hold result
     chains = {}
+    n_gram_length = int(n_gram_length)
     #create variable to hold the words
     words = text_string.split()
 
     #look through words to find the word pairs that will be keys
-    for i in range(len(words) - 2):
-        key = (words[i], words[i + 1])
+    for i in range(len(words) - n_gram_length):
+        key = ()
+        for num in range(n_gram_length):
+            key += (words[i + num],)
+            #key = (words[i], words[i + 1])
 
         if key in chains:
-            chains[key].append(words[i+2])
+            chains[key].append(words[i+n_gram_length])
         else:
-            chains[key] = [words[i+2]]
+            chains[key] = [words[i+n_gram_length]]
 
     return chains
 
@@ -71,7 +76,8 @@ def make_text(chains):
     #     except KeyError:
     #         break
     #add our link text to the list
-    words.extend([link_text[0], link_text[1]])
+    link_text_list = list(link_text)
+    words.extend(link_text_list)
 
     #look through to get random next word
     while link_text in chains:
@@ -80,18 +86,19 @@ def make_text(chains):
         #add the new words to the string
         words.append(next_word)
 
-        link_text = (link_text[1], next_word)
+        link_text = link_text[1:] + (next_word,)
 
     return " ".join(words)
 
 
-input_path = "green-eggs.txt"
+#input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
-input_text = open_and_read_file(input_path)
+input_text = open_and_read_file(sys.argv[1])
 
 # Get a Markov chain
-chains = make_chains(input_text)
+chains = make_chains(input_text, sys.argv[2])
+print chains
 
 # Produce random text
 random_text = make_text(chains)
