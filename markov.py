@@ -60,6 +60,27 @@ def make_text(chains):
     words = []
 
     # your code goes here
+    #pick a random key to start with
+    link_text = choice(chains.keys())
+
+    #this might work, but looking and then stopping is better
+    # while True:
+    #     try:
+    #         new_link = (link_text[1], next_word)
+
+    #     except KeyError:
+    #         break
+    #add our link text to the list
+    words.extend([link_text[0], link_text[1]])
+
+    #look through to get random next word
+    while link_text in chains:
+        next_word = choice(chains[link_text])
+
+        #add the new words to the string
+        words.append(next_word)
+
+        link_text = (link_text[1], next_word)
 
     return " ".join(words)
 
@@ -71,9 +92,8 @@ input_text = open_and_read_file(input_path)
 
 # Get a Markov chain
 chains = make_chains(input_text)
-print chains
 
 # Produce random text
-#random_text = make_text(chains)
+random_text = make_text(chains)
 
-#print random_text
+print random_text
