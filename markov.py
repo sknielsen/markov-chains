@@ -10,15 +10,17 @@ from random import choice
 import sys
 
 
-def open_and_read_file(file_path):
+def open_and_read_file(files):
     """Takes file path as string; returns text as string.
 
     Takes a string that is a file path, opens the file, and turns
     the file's contents as one string of text.
     """
 
-    # open file and put it in one long string
-    text_string = open(file_path).read()
+    # open any number of files and put them in one long string
+    text_string = ''
+    for text_file in files:
+        text_string += open(text_file).read()
 
     return text_string
 
@@ -126,10 +128,10 @@ def limit_to_140_char(string):
 #input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
-input_text = open_and_read_file(sys.argv[1])
+input_text = open_and_read_file(sys.argv[1:-1])
 
 # Get a Markov chain
-chains = make_chains(input_text, sys.argv[2])
+chains = make_chains(input_text, sys.argv[-1])
 
 # Produce random text
 random_text = make_text(chains)
