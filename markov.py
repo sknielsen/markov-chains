@@ -19,10 +19,12 @@ def open_and_read_file(files):
 
     # open any number of files and put them in one long string
     text_string = ''
+
     for text_file in files:
         text_string += open(text_file).read()
 
     return text_string
+
 
 def make_chains(text_string, n_gram_length):
     """Takes input text as string; returns dictionary of markov chains.
@@ -45,6 +47,7 @@ def make_chains(text_string, n_gram_length):
         >>> chains[('hi', 'there')]
         ['mary', 'juanita']
     """
+
     #create dictionary to hold result
     chains = {}
     n_gram_length = int(n_gram_length)
@@ -57,14 +60,8 @@ def make_chains(text_string, n_gram_length):
         key = ()
         for num in range(n_gram_length):
             key += (words[i + num],)
-
-    #here is a successful way to do it, but below using setdefault is better
-    #     if key in chains:
-    #         chains[key].append(words[i+n_gram_length])
-    #     else:
-    #         chains[key] = [words[i+n_gram_length]]
-
         chains.setdefault(key, []).append(words[i+n_gram_length])
+
     return chains
 
 
@@ -77,16 +74,10 @@ def make_text(chains):
     #pick a random key to start with
     #force only start on capital letter
     link_text = choice(chains.keys())
+
     while not link_text[0][0].isupper():
         link_text = choice(chains.keys())
 
-    #this might work, but looking and then stopping is better
-    # while True:
-    #     try:
-    #         new_link = (link_text[1], next_word)
-
-    #     except KeyError:
-    #         break
     #add our link text to the list
     link_text_list = list(link_text)
     words.extend(link_text_list)
@@ -115,7 +106,6 @@ def limit_to_140_char(string):
     #iterate backwards through the string until we find the index of !.?
     for i in range((len(truncated_string) - 1), 0, -1):
         if truncated_string[i] in ['.', '!', '?']:
-
             #slice the string from begining to that index +1
             final_string = truncated_string[:(i + 1)]
             return final_string
@@ -126,13 +116,13 @@ def limit_to_140_char(string):
             final_string = truncated_string[:i] + '...'
             return final_string
     
-#input_path = "green-eggs.txt"
 
-# Open the file and turn it into one long string
+# Open the files and turn them into one long string
 input_text = open_and_read_file(sys.argv[1:-1])
 
-# Get a Markov chain
+# Check for valid integer for n gram length
 try:
+    # Get a Markov chain
     chains = make_chains(input_text, sys.argv[-1])
     # Produce random text
     random_text = make_text(chains)
