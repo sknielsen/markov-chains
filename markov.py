@@ -13,6 +13,9 @@ import sys
 def open_and_read_file(files):
     """Takes file path as string; returns text as string.
 
+    >>> open_and_read_file(['green-eggs.txt'])
+    'Would you could you in a house?\\nWould you could you with a mouse?\\nWould you could you in a box?\\nWould you could you with a fox?\\nWould you like green eggs and ham?\\nWould you like them, Sam I am?\\n'
+
     Takes a string that is a file path, opens the file, and turns
     the file's contents as one string of text.
     """
@@ -34,18 +37,9 @@ def make_chains(text_string, n_gram_length):
     words in the input text.
 
     For example:
+    >>> make_chains('Would you could you in a house?\\nWould you could you with a mouse?\\nWould you could you in a box?\\nWould you could you with a fox?\\nWould you like green eggs and ham?\\nWould you like them, Sam I am?\\n', 2)
+    {('a', 'fox?'): ['Would'], ('Sam', 'I'): ['am?'], ('could', 'you'): ['in', 'with', 'in', 'with'], ('you', 'with'): ['a', 'a'], ('box?', 'Would'): ['you'], ('ham?', 'Would'): ['you'], ('you', 'in'): ['a', 'a'], ('a', 'house?'): ['Would'], ('like', 'green'): ['eggs'], ('like', 'them,'): ['Sam'], ('and', 'ham?'): ['Would'], ('Would', 'you'): ['could', 'could', 'could', 'could', 'like', 'like'], ('you', 'could'): ['you', 'you', 'you', 'you'], ('a', 'mouse?'): ['Would'], ('them,', 'Sam'): ['I'], ('in', 'a'): ['house?', 'box?'], ('with', 'a'): ['mouse?', 'fox?'], ('house?', 'Would'): ['you'], ('a', 'box?'): ['Would'], ('green', 'eggs'): ['and'], ('you', 'like'): ['green', 'them,'], ('mouse?', 'Would'): ['you'], ('fox?', 'Would'): ['you'], ('eggs', 'and'): ['ham?']}
 
-        >>> chains = make_chains("hi there mary hi there juanita")
-
-    Each bigram (except the last) will be a key in chains:
-
-        >>> sorted(chains.keys())
-        [('hi', 'there'), ('mary', 'hi'), ('there', 'mary')]
-
-    Each item in chains is a list of all possible following words:
-
-        >>> chains[('hi', 'there')]
-        ['mary', 'juanita']
     """
 
     #create dictionary to hold result
@@ -66,15 +60,20 @@ def make_chains(text_string, n_gram_length):
 
 
 def make_text(chains):
-    """Returns text from chains."""
+    """Returns text from chains.
+
+    >>> text_test = make_text({('a', 'fox?'): ['Would'], ('Sam', 'I'): ['am?'], ('could', 'you'): ['in', 'with', 'in', 'with'], ('you', 'with'): ['a', 'a'], ('box?', 'Would'): ['you'], ('ham?', 'Would'): ['you'], ('you', 'in'): ['a', 'a'], ('a', 'house?'): ['Would'], ('like', 'green'): ['eggs'], ('like', 'them,'): ['Sam'], ('and', 'ham?'): ['Would'], ('Would', 'you'): ['could', 'could', 'could', 'could', 'like', 'like'], ('you', 'could'): ['you', 'you', 'you', 'you'], ('a', 'mouse?'): ['Would'], ('them,', 'Sam'): ['I'], ('in', 'a'): ['house?', 'box?'], ('with', 'a'): ['mouse?', 'fox?'], ('house?', 'Would'): ['you'], ('a', 'box?'): ['Would'], ('green', 'eggs'): ['and'], ('you', 'like'): ['green', 'them,'], ('mouse?', 'Would'): ['you'], ('fox?', 'Would'): ['you'], ('eggs', 'and'): ['ham?']})
+    >>> text_test[0].isupper()
+    True
+    """
 
     words = []
 
     # your code goes here
     #pick a random key to start with
-    #force only start on capital letter
     link_text = choice(chains.keys())
 
+    #force only start on capital letter
     while not link_text[0][0].isupper():
         link_text = choice(chains.keys())
 
@@ -98,6 +97,11 @@ def limit_to_140_char(string):
     """Take string and truncate to 140 characters
 
     Take string and limit to max 140 characters and end on punctuation
+
+    >>> test_length = limit_to_140_char('Liberty, and dedicated to the proposition that all men are created equal. Now we are engaged in a great civil war, testing whether that nation, or any nation so conceived and so dedicated, can long endure. We are met on a great battle-field of that war. We have come to dedicate a portion of that field, as a final resting place for those who here gave their lives that that nation might live. It is altogether fitting and proper that we here highly resolve that these dead shall not perish from the earth.')
+    >>> len(test_length) <= 140
+    True
+
     """
 
     #truncate the string to 140 characters
@@ -115,7 +119,7 @@ def limit_to_140_char(string):
         if truncated_string[i] in [',', ' ']:
             final_string = truncated_string[:i] + '...'
             return final_string
-    
+
 
 # Open the files and turn them into one long string
 input_text = open_and_read_file(sys.argv[1:-1])
@@ -134,3 +138,10 @@ try:
     print random_text
 except ValueError:
     print "Please give a valid integer for the n-gram length"
+
+#for testing
+if __name__ == "__main__":
+    import doctest
+    result = doctest.testmod()
+    if result.failed == 0:
+        print("ALL TESTS PASSED")
