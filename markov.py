@@ -48,6 +48,7 @@ def make_chains(text_string, n_gram_length):
     #create dictionary to hold result
     chains = {}
     n_gram_length = int(n_gram_length)
+
     #create variable to hold the words
     words = text_string.split()
 
@@ -131,13 +132,15 @@ def limit_to_140_char(string):
 input_text = open_and_read_file(sys.argv[1:-1])
 
 # Get a Markov chain
-chains = make_chains(input_text, sys.argv[-1])
+try:
+    chains = make_chains(input_text, sys.argv[-1])
+    # Produce random text
+    random_text = make_text(chains)
 
-# Produce random text
-random_text = make_text(chains)
+    # Check if text is great than 140 characters
+    if len(random_text) > 140:
+        random_text = limit_to_140_char(random_text)
 
-# Check if text is great than 140 characters
-if len(random_text) > 140:
-    random_text = limit_to_140_char(random_text)
-
-print random_text
+    print random_text
+except ValueError:
+    print "Please give a valid integer for the n-gram length"
