@@ -19,3 +19,15 @@ script_text = markov.open_and_read_file(["friends.txt"])
 
 #edit the script to remove things that we don't want to deal with
 clean_script_text = re.sub(r'\([^)]+\)', '', script_text)
+clean_script_text = re.sub(r'\[[^\]]+\]', '', clean_script_text)
+
+#find the character names and put them in a list
+characters_list = re.findall('[A-Z]\w+\:', clean_script_text)
+
+#take the list and convert it to a text string
+characters = ' '.join(characters_list)
+#create markov dictionary from characters string
+character_markov = markov.make_chains(characters, '2')
+
+#for testing
+print character_markov
