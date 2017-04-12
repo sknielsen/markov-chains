@@ -112,23 +112,17 @@ def limit_to_140_char(string):
     #iterate backwards through the string until we find the index of !.?
     for i in range((len(truncated_string) - 1), 0, -1):
         if truncated_string[i] in ['.', '!', '?']:
-            final_string = truncated_string[:(i + 1)]
-            return final_string
-        #if
-    for i in range((len(truncated_string) - 1), 0, -1):
-        if truncated_string[i] == ',':
+
+            #slice the string from begining to that index +1
             final_string = truncated_string[:(i + 1)]
             return final_string
 
-    for i in range((len(truncated_string) - 1), 0, -1):
-        if truncated_string[i] == ' ':
-            final_string = truncated_string[:(i + 1)]
+    #repeat for if there is no .!? and add elipses to make it look nice
+    for i in range((len(truncated_string) - 3), 0, -1):
+        if truncated_string[i] in [',', ' ']:
+            final_string = truncated_string[:i] + '...'
             return final_string
-    #slice the string from begining to that index +1
-
-
-
-
+    
 #input_path = "green-eggs.txt"
 
 # Open the file and turn it into one long string
