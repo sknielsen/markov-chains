@@ -13,6 +13,17 @@ each character_lines -> make_chains produces a dictionary for each character of 
 
 import markov
 import re
+import pprint
+
+
+def make_character_lines(character_name, text_string):
+    """Given character name and the text, returns a markov dictionary of their lines from text"""
+
+    characters_lines = re.findall('(?<=' + re.escape(character_name) + '\ )[\s\S]+?(?=\n\n)', text_string)
+    characters_lines = ' '.join(characters_lines)
+    characters_markov = markov.make_chains(characters_lines, '2')
+    return characters_markov
+
 
 #open the script and put it all in one string
 script_text = markov.open_and_read_file(["friends.txt"])
@@ -29,5 +40,13 @@ characters = ' '.join(characters_list)
 #create markov dictionary from characters string
 character_markov = markov.make_chains(characters, '2')
 
+# Create dictionary with character names and their markov chains
+character_lines_markov = {}
+for character in set(characters_list):
+    character_lines_markov[character] = make_character_lines(character, clean_script_text)
+
+print pprint.pprint(character_lines_markov)
+
 #for testing
-print character_markov
+#print character_markov
+#print make_character_lines('Rachel:', clean_script_text)

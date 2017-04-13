@@ -120,28 +120,29 @@ def limit_to_140_char(string):
             final_string = truncated_string[:i] + '...'
             return final_string
 
+def main():
+    # Open the files and turn them into one long string
+    input_text = open_and_read_file(sys.argv[1:-1])
 
-# Open the files and turn them into one long string
-input_text = open_and_read_file(sys.argv[1:-1])
+    # Check for valid integer for n gram length
+    try:
+        # Get a Markov chain
+        chains = make_chains(input_text, sys.argv[-1])
+        # Produce random text
+        random_text = make_text(chains)
 
-# Check for valid integer for n gram length
-try:
-    # Get a Markov chain
-    chains = make_chains(input_text, sys.argv[-1])
-    # Produce random text
-    random_text = make_text(chains)
+        # Check if text is great than 140 characters
+        if len(random_text) > 140:
+            random_text = limit_to_140_char(random_text)
 
-    # Check if text is great than 140 characters
-    if len(random_text) > 140:
-        random_text = limit_to_140_char(random_text)
-
-    print random_text
-except ValueError:
-    print "Please give a valid integer for the n-gram length"
+        print random_text
+    except ValueError:
+        print "Please give a valid integer for the n-gram length"
 
 #for testing
 if __name__ == "__main__":
-    import doctest
-    result = doctest.testmod()
-    if result.failed == 0:
-        print("ALL TESTS PASSED")
+    main()
+    # import doctest
+    # result = doctest.testmod()
+    # if result.failed == 0:
+    #     print("ALL TESTS PASSED")
