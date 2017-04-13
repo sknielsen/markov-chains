@@ -9,6 +9,7 @@ all_characters string -> make_chains produces a dictionary for who talks to whom
 
 each character_lines -> make_chains produces a dictionary for each character of what they say
 
+script found at: http://uncutfriendsepisodes.tripod.com/season1/103uncut.htm
 """
 
 import markov
