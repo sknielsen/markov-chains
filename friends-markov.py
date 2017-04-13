@@ -17,6 +17,8 @@ import re
 import pprint
 
 
+scripts = ['friends1.txt', 'friends2.txt', 'friends3.txt']
+
 def make_character_lines(character_name, text_string):
     """Given character name and the text, returns a markov dictionary of their lines from text"""
 
@@ -27,11 +29,12 @@ def make_character_lines(character_name, text_string):
 
 
 #open the script and put it all in one string
-script_text = markov.open_and_read_file(["friends.txt"])
+script_text = markov.open_and_read_file(scripts)
 
 #edit the script to remove things that we don't want to deal with
 clean_script_text = re.sub(r'\([^)]+\)', '', script_text)
 clean_script_text = re.sub(r'\[[^\]]+\]', '', clean_script_text)
+clean_script_text = re.sub(r'\.{3,}', '', clean_script_text)
 
 #find the character names and put them in a list
 characters_list = re.findall('[A-Z]\w+\:', clean_script_text)
@@ -43,8 +46,12 @@ character_markov = markov.make_chains(characters, '2')
 
 # Create dictionary with character names and their markov chains
 character_lines_markov = {}
-for character in set(characters_list):
+characters_set = set(characters_list)
+#print characters_set
+#print make_character_lines('All:', clean_script_text)
+for character in characters_set:
     character_lines_markov[character] = make_character_lines(character, clean_script_text)
+character_lines_markov = {key: value for key, value in character_lines_markov.items() if value != {}}
 
 print pprint.pprint(character_lines_markov)
 
